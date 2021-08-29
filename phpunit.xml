@@ -20,9 +20,9 @@
             <directory suffix=".php">./app</directory>
         </include>
         <exclude>
-            <directory suffix=".php">./app/*/Providers</directory>
-            <directory suffix=".php">./app/*/Exceptions</directory>
-            <directory suffix=".php">./app/*/Domains</directory>
+            <directory suffix=".php">./app/Providers</directory>
+            <directory suffix=".php">./app/Exceptions</directory>
+            <directory suffix=".php">./app/Domains</directory>
             <file>./app/Console/Kernel.php</file>
             <file>./app/Http/Kernel.php</file>
         </exclude>
