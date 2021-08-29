@@ -1,7 +1,7 @@
-# XXD - a Laravel TDD Sample Project
+# KivaNote - a Laravel TDD Sample Project
 
-Let me introduce you to XXX, a simple real-world application using Laravel to show you
-how the TDD & Unit Testing works.
+Let me introduce you to KivaNote, a simple real-world application using Laravel to show you
+how the TDD & Unit Testing works (with PHP & Laravel).
 
 TDD or Unit Testing, it's absolutely good practice and give the developers more confident & trust about their works, their project. Especially importance projects like:
 Banking, Healthcare, E-commerce,...
@@ -13,7 +13,7 @@ I know out there, many people wants to learn how to write unit testing in proper
     - BS, I know right??
 - You need to test this, test that,...
 
-Those articles won't help and you won't probably learn anything from that, especially for newbie.
+Those articles won't help, and you won't probably learn anything from that, especially for newbie.
 
 So, this little project of mine is going to help you know how to write tests, especially using PHP & Laravel.
 

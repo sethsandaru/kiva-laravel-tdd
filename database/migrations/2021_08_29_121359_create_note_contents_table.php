@@ -17,7 +17,7 @@ class CreateNoteContentsTable extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->foreignId('note_id')->index();
-            $table->mediumText('content')->index();
+            $table->longText('content');
             $table->timestamps();
             $table->softDeletes();
         });
