@@ -36,7 +36,6 @@ jobs:
           composer install --no-interaction
           php artisan --env=testing key:generate
           php artisan migrate
-          php artisan passport:keys
           php artisan route:cache
           mkdir -p storage/logs && touch storage/logs/laravel.log
 
