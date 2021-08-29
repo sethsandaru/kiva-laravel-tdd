@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory suffix="Test.php">./tests/Feature</directory>
+        </testsuite>
+        <testsuite name="Quick">
+            <directory suffix="Test.php">./tests/Quick</directory>
+        </testsuite>
+    </testsuites>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./app</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">./app/*/Providers</directory>
+            <directory suffix=".php">./app/*/Exceptions</directory>
+            <directory suffix=".php">./app/*/Domains</directory>
+            <file>./app/Console/Kernel.php</file>
+            <file>./app/Http/Kernel.php</file>
+        </exclude>
+    </coverage>
+    <php>
+        <ini name="memory_limit" value="-1"/>
+        <server name="APP_ENV" value="testing"/>
+        <server name="BCRYPT_ROUNDS" value="4"/>
+        <server name="CACHE_DRIVER" value="array"/>
+        <server name="MAIL_DRIVER" value="array"/>
+        <server name="QUEUE_CONNECTION" value="sync"/>
+        <server name="SESSION_DRIVER" value="array"/>
+        <server name="DEFAULT_MEDIA_LIBRARY_FILESYSTEM" value="local"/>
+        <server name="CLOUD_DISK" value="local"/>
+    </php>
+</phpunit>

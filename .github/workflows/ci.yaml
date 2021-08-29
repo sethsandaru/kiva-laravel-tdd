@@ -1,0 +1,52 @@
+name: Build and Test
+
+on:
+  pull_request:
+    branches:
+      - 'master'
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+        if: success()
+
+      - name: Setup PHP with coverage driver
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0.5'
+          coverage: pcov
+
+      - name: setup application
+        if: success()
+        run: |
+          sudo service mysql start
+          php -v
+          cp .env.testing.example .env.testing
+          cp .env.testing.example .env
+          mysql -uroot -proot -e "CREATE DATABASE kiva_test;"
+          composer install --no-interaction
+          php artisan --env=testing key:generate
+          php artisan migrate
+          php artisan passport:keys
+          php artisan route:cache
+          mkdir -p storage/logs && touch storage/logs/laravel.log
+
+      - name: PHPUnit tests with coverage
+        if: success() && github.event.pull_request.draft == false
+        run: |
+          ./skip-tests || composer test-coverage
+
+      - name: upload coverage to codecov.io
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
