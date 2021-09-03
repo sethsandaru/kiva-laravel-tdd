@@ -3,6 +3,7 @@
 namespace App\Domains;
 
 use App\Models\Image;
+use App\Models\User;
 use Illuminate\Http\UploadedFile;
 
 interface ImageManageContract
@@ -18,15 +19,18 @@ interface ImageManageContract
      * Upload the file
      *
      * @param UploadedFile $file
+     * @param User $user
      *
      * @return Image
      */
-    public function upload(UploadedFile $file): Image;
+    public function upload(UploadedFile $file, User $user): ?Image;
 
     /**
      * Delete the file
      *
+     * @param Image $image
+     *
      * @return bool
      */
-    public function delete(): bool;
+    public function delete(Image $image): bool;
 }

@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Domains\ImageManageContract;
-use App\Services\ImageServices\ImgurImageService;
+use App\Services\ImageServices\ImgbbImageService;
 use App\Services\ImageServices\SelfHostedImageService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
             if (isset($parameters['service'])) {
                 $imageServices = new Collection([
                     SelfHostedImageService::NAME => SelfHostedImageService::class,
-                    ImgurImageService::NAME => ImgurImageService::class,
+                    ImgbbImageService::NAME => ImgbbImageService::class,
                 ]);
 
                 return app($imageServices[$parameters['service']]);

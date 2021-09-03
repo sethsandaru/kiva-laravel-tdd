@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\NoteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,11 @@ Route::prefix('v1')->group(function () {
 
         // Notes
         Route::resource('notes', NoteController::class)->except([
+            'create', 'edit'
+        ]);
+
+        // Images
+        Route::resource('images', ImagesController::class)->except([
             'create', 'edit'
         ]);
     });

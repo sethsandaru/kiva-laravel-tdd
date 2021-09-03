@@ -22,7 +22,6 @@ class CreateImagesTable extends Migration
             $table->string('service')->index();
             $table->json('payload')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

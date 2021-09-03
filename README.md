@@ -22,27 +22,84 @@ a real-world project.
 So, this little project of mine is going to help you know how to write tests, especially using PHP & Laravel.
 
 ## Application Introduction
-An API Application for a simple note application, also have Imgur as an external service (to store images).
+An API Application for a simple note application. It's providing these REST API endpoints
+
+### DB Overview
+- 1 User `users`:
+  - **n** Images `images`
+  - **n** Notes `notes`
+    - **n** Note Contents `note_contents` (history purpose)
+
+### Authentication
+- [POST] v1/login
+  - Body:
+    - email
+    - password
+  - Response:
+    - access_token
+- [POST] v1/logout
+  - Header
+    - Bearer **{authToken}**
+
+**Note**: for all the endpoints below, Bearer **{authToken}** is **required**.
+
+### Notes
+- [GET] `v1/notes`: Get notes list of user.
+  - Query param:
+    - page (default **1**)
+    - limit (default **10**)
+- [GET] `v1/notes/{noteUuid}`: Get a single note details
+- [POST] `v1/notes`: Add new note
+  - Body
+    - title
+    - content
+- [PUT] `v1/notes/{noteUuid}`: Update an existing note
+  - Body
+    - title
+    - content
+- [DELETE] `v1/notes/{noteUuid}`: Delete an existing note
+
+### Images
+- [GET] `v1/images`: Get images that uploaded by user
+  - Query param:
+    - page (default **1**)
+    - limit (default **10**)
+- [GET] `v/images/{imageUuid}`: Get a single image details
+- [POST] `v1/images`: Upload an image
+  - Body (`FormData`):
+    - image (binary)
+    - type: 
+      - `self-hosted`: save in the filesystem
+      - `imgbb`: save on ImgBB external service
+- [DELETE] `v1/images/{imageUuid}`: Delete an image
+
+### External Services
+- ImgBB: to upload image
+  - Also showing you how to write tests for the external APIs
 
 ## What do we have?
 - PHP8
   - Super recommended, fast and added a lot of cool syntax.
 - Laravel 8
 - PHPUnit (of course)
-- Coverage
+- Coverage - using CodeCov (free)
 
-## CI with GitHub Actions?
-Yes. That's where the fun begin.
+## Continuous Integration
+Yes. That's where the fun begin. In real life, every projects that have unit testing also have CI process. Some use GitLab CI, some use Jenkins CI.
+
+But for Kiva, I will use GitHub Action.
 
 ## Test definitions
 - Unit Test
-  - Where we're going to test just only a method of a Class
-- Feature Test
-  - HTTP Test to test the endpoints
+  - Where we're going to test methods of the Class
 - Quick Test
   - Same as Unit, but this test won't involve database, all we need to do is mocking then testing
+  - Super fast since no dependencies at all.
+- Feature Test
+  - HTTP Test to test the endpoints
 - Integration Test
   - Test multiple endpoints of a flow to see if they are working correctly
+    - Not sure we would have it for Kiva, but let's see
 
 ### Coverage Info
 So it depends which kind of projects are you working on to set a coverage goal.

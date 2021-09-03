@@ -22,7 +22,8 @@ class NoteController extends APIController
      */
     public function index(NoteIndexRequest $request): JsonResponse
     {
-        $notes = Note::where('user_id', $request->user()->id)->paginate();
+        $limit = $request->input('limit', 10);
+        $notes = Note::where('user_id', $request->user()->id)->paginate($limit);
         return $this->respondOk(NoteResource::collection($notes)->resource);
     }
 
