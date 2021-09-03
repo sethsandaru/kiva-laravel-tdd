@@ -5,6 +5,7 @@ namespace App\Services\HttpKits;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Client\ClientInterface;
 
 class ApiClient
 {
@@ -21,6 +22,20 @@ class ApiClient
     public function __construct()
     {
         $this->client = new HttpClient();
+    }
+
+    /**
+     * Set Client
+     *
+     * @param ClientInterface $client
+     *
+     * @return ApiClient
+     */
+    public function setClient(ClientInterface $client): self
+    {
+        $this->client = $client;
+
+        return $this;
     }
 
     /**
@@ -78,10 +93,10 @@ class ApiClient
     {
         $this->response = new ClientResponse();
         $options = [
-            'headers' => $this->headers,
+            'headers' => $this->headers ?? [],
         ];
 
-        if ($method == 'GET') {
+        if ($method == 'GET' || $method === 'DELETE') {
             $options['query'] = $payload;
         } else {
             switch ($this->contentType) {
@@ -103,13 +118,13 @@ class ApiClient
             }
         }
 
-        $this->response->endpoint = $url;
-        $this->response->request = $payload;
-
         if (isset($this->baseUrl)) {
             $hasEndingSlash = substr($this->baseUrl, -1, 1) === '/';
             $url = $this->baseUrl . (!$hasEndingSlash ? '/' : '') . $url;
         }
+
+        $this->response->endpoint = $url;
+        $this->response->request = $payload;
 
         try {
             $data = $this->client->request($method, $url, $options)->getBody();
@@ -118,6 +133,7 @@ class ApiClient
         } catch (GuzzleException | ClientException $e) {
             $this->response->responseCode = $e->getCode();
             $this->response->responseMessage = $e->getMessage();
+            $this->response->responseSuccess = false;
             $this->response->data = json_decode($e->getResponse()->getBody(), true) ?? [];
         } finally {
             return $this->response;
