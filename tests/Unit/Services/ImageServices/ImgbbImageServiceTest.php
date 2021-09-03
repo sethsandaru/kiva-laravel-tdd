@@ -46,6 +46,7 @@ class ImgbbImageServiceTest extends TestCase
 
         // create mock api response
         $uploadSuccessfulResponse = $this->getSuccessfulMockedResponse($this->fixtures . '/upload_successful_response.json');
+        $this->client->method('setContentType')->willReturnSelf();
         $this->client->method('post')->willReturn($uploadSuccessfulResponse);
 
         $image = $this->service->upload($imageFile, $this->user);

@@ -69,7 +69,7 @@ class ImagesControllerTest extends TestCase
 
     public function testStoreWillUploadImage()
     {
-        Storage::fake();
+        $disk = Storage::fake('public');
         $imageFile = UploadedFile::fake()->image('my-image.jpg');
 
         $response = $this->json('POST', 'api/v1/images', [
@@ -80,7 +80,7 @@ class ImagesControllerTest extends TestCase
         $response->assertOk();
 
         $fileName = $response->json('filename');
-        Storage::assertExists(SelfHostedImageService::BASE_PATH . '/' . $fileName);
+        $disk->assertExists(SelfHostedImageService::BASE_PATH . '/' . $fileName);
 
         // mocking imgbb service and set DI
         $imgBBService = $this->createMock(ImgbbImageService::class);

@@ -13,6 +13,8 @@ use Illuminate\Support\Str;
 class SelfHostedImageService implements ImageManageContract
 {
     public const NAME = 'self-hosted';
+
+    public const DISK = 'public';
     public const BASE_PATH = 'img-self-hosted';
 
     /**
@@ -43,12 +45,12 @@ class SelfHostedImageService implements ImageManageContract
             $file->getClientOriginalExtension()
         );
 
-        $filePath = $file->storePubliclyAs(self::BASE_PATH, $newFileName);
+        $filePath = $file->storePubliclyAs(self::BASE_PATH, $newFileName, ['disk' => self::DISK]);
 
         return Image::create([
             'user_id' => $user->id,
             'filename' => $newFileName,
-            'url' => public_path(self::BASE_PATH . '/' . $newFileName),
+            'url' => asset(sprintf('storage/%s/%s', self::BASE_PATH, $newFileName)),
             'service' => $this->getName(),
             'payload' => [
                 'filePath' => $filePath,
@@ -67,7 +69,7 @@ class SelfHostedImageService implements ImageManageContract
     public function delete(Image $image): bool
     {
         // delete from storage
-        Storage::delete($image->payload['filePath']);
+        Storage::disk(self::DISK)->delete($image->payload['filePath']);
 
         // then delete record
         return $image->delete();

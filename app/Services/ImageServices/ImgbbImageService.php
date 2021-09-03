@@ -46,9 +46,10 @@ class ImgbbImageService implements ImageManageContract
      */
     public function upload(UploadedFile $file, User $user): ?Image
     {
-        $uploadResponse = $this->apiClient->post('1/upload?key=' . $this->apiKey, [
-            'image' => $file,
-        ]);
+        $uploadResponse = $this->apiClient->setContentType(ApiClient::CONTENT_TYPE_FORM_DATA)
+            ->post('1/upload?key=' . $this->apiKey, [
+                'image' => base64_encode($file->getContent()),
+            ]);
         if (!$uploadResponse->isSuccessful()) {
             return $this->setErrorMessage('Failed to upload the image to ImgBB.');
         }

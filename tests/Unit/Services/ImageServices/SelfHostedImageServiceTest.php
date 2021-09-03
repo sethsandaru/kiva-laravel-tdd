@@ -30,7 +30,7 @@ class SelfHostedImageServiceTest extends TestCase
 
     public function testUploadSuccessfully()
     {
-        Storage::fake();
+        $disk = Storage::fake('public');
         $imageFile = UploadedFile::fake()->image('my-image.jpg');
 
         $image = $this->service->upload($imageFile, $this->user);
@@ -44,15 +44,15 @@ class SelfHostedImageServiceTest extends TestCase
             'uuid' => $image->uuid,
         ]);
 
-        Storage::assertExists($image->payload['filePath']);
+        $disk->assertExists($image->payload['filePath']);
     }
 
     public function testDeleteSuccessfully()
     {
-        Storage::fake();
+        $disk = Storage::fake('public');
         $imageFile = UploadedFile::fake()->image('my-image.jpg');
         $image = $this->service->upload($imageFile, $this->user);
-        Storage::assertExists($image->payload['filePath']);
+        $disk->assertExists($image->payload['filePath']);
 
         $deleteStatus = $this->service->delete($image);
 
@@ -60,6 +60,6 @@ class SelfHostedImageServiceTest extends TestCase
         $this->assertDatabaseMissing($image->getTable(), [
             'uuid' => $image->uuid,
         ]);
-        Storage::assertMissing($image->payload['filePath']);
+        $disk->assertMissing($image->payload['filePath']);
     }
 }
