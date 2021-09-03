@@ -34,8 +34,20 @@ class AuthControllerTest extends TestCase
         $this->json('POST', 'api/v1/login', [
             'email' => $user->email,
             'password' => 'password',
-        ])->assertOk()->assertJsonStructure([
+        ])
+        ->assertOk()
+        ->assertJsonStructure([
             'access_token',
+            'user' => [
+                'uuid',
+                'name',
+                'email'
+            ],
+        ])
+        ->assertJsonFragment([
+            'uuid' => $user->uuid,
+            'name' => $user->name,
+            'email' => $user->email,
         ]);
     }
 

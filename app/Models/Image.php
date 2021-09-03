@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Services\Traits\EloquentBuilderMixin;
 use App\Services\Traits\HasUuid;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -19,12 +21,26 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property User $user
+ * @mixin EloquentBuilderMixin
  */
 class Image extends Model
 {
-    use HasUuid;
+    use HasUuid, HasFactory;
 
     protected $table = 'images';
+
+    protected $fillable = [
+        'user_id',
+        'filename',
+        'url',
+        'service',
+        'payload',
+    ];
+
+    protected $casts = [
+        'user_id' => 'int',
+        'payload' => 'array',
+    ];
 
     /**
      * A note belongs to an User
