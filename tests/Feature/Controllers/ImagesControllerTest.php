@@ -139,9 +139,9 @@ class ImagesControllerTest extends TestCase
 
     public function testDestroyWillRemoveTheImage()
     {
-        Storage::fake();
+        $disk = Storage::fake(SelfHostedImageService::DISK);
         $imageFile = UploadedFile::fake()->image('my-image.jpg')
-            ->storePubliclyAs('test', 'my-image.jpg');
+            ->storePubliclyAs('test', 'my-image.jpg', ['disk' => SelfHostedImageService::DISK]);
 
         $image = Image::factory()->create([
             'user_id' => $this->user->id,
@@ -150,11 +150,11 @@ class ImagesControllerTest extends TestCase
             ],
         ]);
 
-        Storage::assertExists($imageFile);
+        $disk->assertExists($imageFile);
 
         $this->json('DELETE', 'api/v1/images/' . $image->uuid)
             ->assertOk();
 
-        Storage::assertMissing($imageFile);
+        $disk->assertMissing($imageFile);
     }
 }
