@@ -57,7 +57,22 @@ class ImgbbImageServiceTest extends TestCase
 
         $this->assertDatabaseHas($image->getTable(), [
             'uuid' => $image->uuid,
+            'service' => ImgbbImageService::NAME,
         ]);
+    }
+
+    public function testUploadFailedFromExternal()
+    {
+        $imageFile = UploadedFile::fake()->image('my-image.jpg');
+
+        // create mock api response
+        $uploadResponse = $this->getErrorMockedResponse($this->fixtures . '/upload_failed_response.json');
+        $this->client->method('post')->willReturn($uploadResponse);
+
+        $image = $this->service->upload($imageFile, $this->user);
+
+        $this->assertNull($image);
+        $this->assertIsString($this->service->getErrorMessage());
     }
 
     public function testDeleteSuccessfully()

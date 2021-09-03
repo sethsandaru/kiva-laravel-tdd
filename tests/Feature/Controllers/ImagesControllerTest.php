@@ -38,6 +38,16 @@ class ImagesControllerTest extends TestCase
             ])
             ->assertJsonMissing([
                 'uuid' => $image2->uuid,
+            ])
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'uuid',
+                        'url',
+                        'filename',
+                        'service',
+                    ],
+                ],
             ]);
     }
 
@@ -109,6 +119,22 @@ class ImagesControllerTest extends TestCase
         ->assertJsonStructure([
             'error',
         ]);
+    }
+
+    public function testStoreUploadGotValidationError()
+    {
+        $imageFile = UploadedFile::fake()->image('my-image.jpg');
+
+        // missing img
+        $this->json('POST', 'api/v1/images', [
+            'type' => ImgbbImageService::NAME,
+        ])->assertStatus(422)->assertInvalid(['image']);
+
+        // wrong type
+        $this->json('POST', 'api/v1/images', [
+            'type' => 'fake',
+            'image' => $imageFile,
+        ])->assertStatus(422)->assertInvalid(['type']);
     }
 
     public function testDestroyWillRemoveTheImage()

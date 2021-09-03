@@ -13,9 +13,19 @@ trait HasErrorMessage
      *
      * @return null
      */
-    public function setErrorMessage(string $errorMessage)
+    private function setErrorMessage(string $errorMessage)
     {
         $this->errorMessage = $errorMessage;
         return null;
+    }
+
+    /**
+     * Get error message
+     *
+     * @return string
+     */
+    public function getErrorMessage(): string
+    {
+        return $this->errorMessage;
     }
 }

@@ -53,7 +53,7 @@ class ImgbbImageService implements ImageManageContract
             return $this->setErrorMessage('Failed to upload the image to ImgBB.');
         }
 
-        $uploadedData = $uploadResponse->getData();
+        $uploadedData = $uploadResponse->getData()['data'];
 
         return Image::create([
             'user_id' => $user->id,
@@ -61,6 +61,7 @@ class ImgbbImageService implements ImageManageContract
             'url' => $uploadedData['url'],
             'type' => $this->getName(),
             'payload' => $uploadedData,
+            'service' => $this->getName(),
         ]);
     }
 

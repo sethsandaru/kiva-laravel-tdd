@@ -49,9 +49,9 @@ abstract class TestCase extends BaseTestCase
      *
      * @param string $path
      *
-     * @return array|null
+     * @return array
      */
-    protected function getMockedResponse(string $path): ?array
+    protected function getMockedResponse(string $path): array
     {
         return json_decode(file_get_contents($path), true);
     }

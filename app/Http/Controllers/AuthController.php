@@ -29,10 +29,11 @@ class AuthController extends APIController
 
         /** @var User $user */
         $user = Auth::user();
+        $user->tokens()->delete();
         $token = $user->createToken('kiva')->accessToken;
 
         return $this->respondOk([
-            'access_token' => $token,
+            'access_token' => $token->token,
             'user' => new UserResource($user),
         ]);
     }
