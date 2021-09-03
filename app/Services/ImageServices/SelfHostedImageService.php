@@ -6,18 +6,14 @@ use App\Domains\ImageManageContract;
 use App\Models\Image;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class SelfHostedImageService implements ImageManageContract
 {
     public const NAME = 'self-hosted';
     public const BASE_PATH = 'img-self-hosted';
-
-    public function __construct(protected Filesystem $filesystem)
-    {
-    }
 
     /**
      * Get the service name
@@ -71,7 +67,7 @@ class SelfHostedImageService implements ImageManageContract
     public function delete(Image $image): bool
     {
         // delete from storage
-        $this->filesystem->delete($image->payload['filePath']);
+        Storage::delete($image->payload['filePath']);
 
         // then delete record
         return $image->delete();
